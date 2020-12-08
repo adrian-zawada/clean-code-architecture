@@ -56,16 +56,16 @@ class Controller extends AbstractController
                 $slots = $doctor->slots();
 
                 if (count($slots)) {
-                    $res = [];
-                    foreach ($array as $slot) {
-                        $res[] = [
+                    $slotsResponse = [];
+                    foreach ($slots as $slot) {
+                        $slotsResponse[] = [
                             'id' => $slot->getId(),
                             'day' => $slot->getDay()->format('Y-m-d'),
                             'from_hour' => $slot->getFromHour(),
                             'duration' => $slot->getDuration()
                         ];
                     }
-                    return new JsonResponse($res);
+                    return new JsonResponse($slotsResponse);
                 } else {
                     return new JsonResponse([]);
                 }
@@ -81,6 +81,8 @@ class Controller extends AbstractController
     }
 
     private function getDoctorById(int $doctorId): ?DoctorEntity {
+
+        /** @var EntityManagerInterface $man */
         $entityManager = $this->getDoctrine()->getManager();
 
         return $entityManager->createQueryBuilder()
